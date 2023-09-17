@@ -1,0 +1,13 @@
+{
+    "editor.formatOnSave": true,
+    "debug.inlineValues": "on",
+    "git.autofetch": true,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}]/**"
+    ],
+    "cmake.configureSettings": {
+        "CMAKE_TOOLCHAIN_FILE": "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    },
+    "sonarlint.pathToCompileCommands": "${workspaceFolder}/target/debug/compile_commands.json"
+}
