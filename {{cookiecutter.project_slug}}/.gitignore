@@ -1,2 +1,4 @@
-/target
-/vcpkg_installed
+**/.DS_Store
+build/
+release/
+CMakeUserPresets.json

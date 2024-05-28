@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+      "llvm-vs-code-extensions.vscode-clangd",
+      "twxs.cmake",
+      "naumovs.color-highlight",
+      "mhutchie.git-graph",
+      "esbenp.prettier-vscode",
+      "ms-vscode.cpptools",
+      "xaver.clang-format",
+      "ms-vscode.cmake-tools"
+    ]
+  }
+  

@@ -1,32 +1,37 @@
-NUM_WORKERS=24
-AppName=App
-DockerImage={{cookiecutter.project_slug}}
+depends:
+	vcpkg integrate install
+	vcpkg install
 
-_build: 
-	cmake -B target/build -S . \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
-		-DCMAKE_TOOLCHAIN_FILE="/opt/vcpkg/vcpkg" \
-		-Wno-dev && \
-	cmake --build target/build -j${NUM_WORKERS}
+build_debug:
+	cmake -S . -B build \
+		-D CMAKE_BUILD_TYPE=Debug \
+		-D BUILD_DOCS=ON \
+		-D BUILD_TESTING=ON \
+		-D ENABLE_COVERAGE=ON \
+		-D {{cookiecutter.project_slug.upper()}}_DEVELOPER_MODE=ON
 
-_debug:
-	cmake -B target/debug -S . \
-		-DCMAKE_BUILD_TYPE=Debug \
-		-DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
-		-DCMAKE_TOOLCHAIN_FILE="/opt/vcpkg/scripts/buildsystems/vcpkg.cmake" \
-		-DBUILD_DOCS=ON \
-		-Wno-dev && \
-	cmake --build target/debug -j${NUM_WORKERS}
+	cmake --build build
 
-run_release:
-	./target/build/${AppName}
+install_debug:
+	cmake --install build
 
-run_debug:
-	./target/debug/${AppName}
+build_and_install_debug:
+	make build_debug
+	make install_debug
 
-build_image:
-	docker build -f .devcontainer/Dockerfile -t ${DockerImage}:latest --squash --compress .
+build_release:
+	cmake -S . -B release -D CMAKE_BUILD_TYPE=Release
+	cmake --build release
 
-run_image_interactive:
-	docker run -it ${DockerImage}
+install_release:
+	cmake --install release
+
+run_example:
+	./build/example/empty_example
+
+run_test:
+	./build/test/{{cookiecutter.project_slug}}_test
+
+run_docs:
+	doxygen build/docs/Doxyfile
+	python3 -m http.server 8000 --directory build/docs/html

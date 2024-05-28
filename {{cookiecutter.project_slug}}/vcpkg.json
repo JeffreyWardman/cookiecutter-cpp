@@ -1,5 +1,19 @@
 {
     "name": "{{cookiecutter.project_slug}}",
-    "version": "0.0.0",
-    "dependencies": []
+    "version-semver": "0.0.0",
+    "dependencies": [],
+    "default-features": [],
+    "features": {
+      "test": {
+        "description": "Dependencies for testing",
+        "dependencies": [
+          {
+            "name": "catch2",
+            "version>=": "3.5.3"
+          }
+        ]
+      }
+    },
+    "builtin-baseline": "587cd223b4ec2f95ac49d393843107bdbd9d8d76"
   }
+  
