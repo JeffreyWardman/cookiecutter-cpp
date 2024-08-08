@@ -1,4 +1,10 @@
 **/.DS_Store
+cmake-build-*/
+CMakeLists.txt.user
+CMakeUserPresets.json
+compile_commands.json
+vcpkg_installed/
+
+.cache/
 build/
 release/
-CMakeUserPresets.json

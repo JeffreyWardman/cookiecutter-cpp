@@ -5,33 +5,32 @@ depends:
 build_debug:
 	cmake -S . -B build \
 		-D CMAKE_BUILD_TYPE=Debug \
-		-D BUILD_DOCS=ON \
+		-D BUILD_MCSS_DOCS=OFF \
 		-D BUILD_TESTING=ON \
 		-D ENABLE_COVERAGE=ON \
 		-D {{cookiecutter.project_slug.upper()}}_DEVELOPER_MODE=ON
-
-	cmake --build build
-
-install_debug:
+	cmake --build build --config Debug
 	cmake --install build
-
-build_and_install_debug:
-	make build_debug
-	make install_debug
 
 build_release:
 	cmake -S . -B release -D CMAKE_BUILD_TYPE=Release
-	cmake --build release
-
-install_release:
+	cmake --build release --config Release
 	cmake --install release
 
 run_example:
-	./build/example/empty_example
+	./build/example/example/empty_example
 
-run_test:
-	./build/test/{{cookiecutter.project_slug}}_test
+run_tests:
+	cd build && ctest --output-on-failure -j16 && cd ..
 
 run_docs:
+	cmake -S . -B build \
+		-D CMAKE_BUILD_TYPE=Debug \
+		-D BUILD_MCSS_DOCS=ON \
+		-D BUILD_TESTING=ON \
+		-D ENABLE_COVERAGE=ON \
+		-D {{cookiecutter.project_slug.upper()}}_DEVELOPER_MODE=ON
+	cmake --build build --config Debug
+	cmake --install build
 	doxygen build/docs/Doxyfile
 	python3 -m http.server 8000 --directory build/docs/html

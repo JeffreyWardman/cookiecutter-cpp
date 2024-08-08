@@ -1,19 +1,18 @@
 {
-    "name": "{{cookiecutter.project_slug}}",
-    "version-semver": "0.0.0",
-    "dependencies": [],
-    "default-features": [],
-    "features": {
-      "test": {
-        "description": "Dependencies for testing",
-        "dependencies": [
-          {
-            "name": "catch2",
-            "version>=": "3.5.3"
-          }
-        ]
-      }
-    },
-    "builtin-baseline": "587cd223b4ec2f95ac49d393843107bdbd9d8d76"
-  }
-  
+  "name": "{{cookiecutter.project_slug}}",
+  "version-semver": "0.0.0",
+  "dependencies": ["fmt"],
+  "default-features": ["test"],
+  "features": {
+    "test": {
+      "description": "Dependencies for testing",
+      "dependencies": [
+        {
+          "name": "catch2",
+          "version>=": "3.5.3"
+        }
+      ]
+    }
+  },
+  "builtin-baseline": "02745e0f4749d1f51d2025824209408f5a6c3614"
+}

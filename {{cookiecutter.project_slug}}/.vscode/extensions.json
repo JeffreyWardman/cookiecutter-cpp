@@ -1,13 +1,14 @@
 {
-    "recommendations": [
-      "llvm-vs-code-extensions.vscode-clangd",
-      "twxs.cmake",
-      "naumovs.color-highlight",
-      "mhutchie.git-graph",
-      "esbenp.prettier-vscode",
-      "ms-vscode.cpptools",
-      "xaver.clang-format",
-      "ms-vscode.cmake-tools"
-    ]
-  }
-  
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "llvm-vs-code-extensions.vscode-clangd",
+    "mhutchie.git-graph",
+    "ms-vscode.cmake-tools",
+    "ms-vscode.cpptools",
+    "naumovs.color-highlight",
+    "sonarsource.sonarlint-vscode",
+    "twxs.cmake",
+    "vadimcn.vscode-lldb",
+    "xaver.clang-format"
+  ]
+}

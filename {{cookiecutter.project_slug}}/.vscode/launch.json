@@ -1,30 +1,113 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "Debug",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build/{{cookiecutter.project_name}}",
-        "args": [],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}",
-        "environment": [],
-        "externalConsole": false,
-        "preLaunchTask": "build",
-        "MIMode": "gdb",
-        "miDebuggerPath": "/usr/bin/gdb",
-        "logging": {
-          "engineLogging": true
-        },
-        "setupCommands": [
-          {
-            "description": "Enable pretty-printing for gdb",
-            "text": "-enable-pretty-printing",
-            "ignoreFailures": true
-          }
-        ]
-      }
-    ]
-  }
-  
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug (Test - Linux)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/test/src/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}_test_addition",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "preLaunchTask": "build",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "logging": {
+        "engineLogging": false,
+        "trace": true,
+        "traceResponse": true
+      },
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "Debug (Example - Linux)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/example/example/empty_example",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "preLaunchTask": "build_release",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "logging": {
+        "engineLogging": false,
+        "trace": true,
+        "traceResponse": true
+      },
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "Release (Example - Linux)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/release/example/example/empty_example",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "preLaunchTask": "build_release",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "logging": {
+        "engineLogging": false,
+        "trace": true,
+        "traceResponse": true
+      },
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "Debug (Test - Mac)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/test/src/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}_test_addition",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "preLaunchTask": "build"
+    },
+    {
+      "name": "Debug (Example - Mac)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/example/example/empty_example",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "preLaunchTask": "build"
+    },
+    {
+      "name": "Release (Example - Mac)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/release/example/example/empty_example",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "preLaunchTask": "build_release"
+    }
+  ]
+}
