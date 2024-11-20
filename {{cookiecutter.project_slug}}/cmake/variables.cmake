@@ -5,8 +5,10 @@
 # Targets necessary to build the project must be provided unconditionally, so
 # consumers can trivially build and package the project
 if(PROJECT_IS_TOP_LEVEL)
-  option({{cookiecutter.project_slug.upper()}}_DEVELOPER_MODE "Enable developer mode" OFF)
+  option(DEVELOPER_MODE "Enable developer mode" OFF)
   option(BUILD_SHARED_LIBS "Build shared libs." OFF)
+  option(BUILD_TESTS "Build unit tests" OFF)
+  option(ENABLE_SIMD "Enable SIMD." ON)
 endif()
 
 # ---- Warning guard ----

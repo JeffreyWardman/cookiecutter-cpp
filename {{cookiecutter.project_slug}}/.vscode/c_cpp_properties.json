@@ -8,7 +8,7 @@
         "/usr/local/include",
         "/usr/include/c++/11",
         "/usr/include/x86_64-linux-gnu/c++/11",
-        "${workspaceFolder}/build/vcpkg_installed/x64-linux/**",
+        "${workspaceFolder}/target/build/vcpkg_installed/x64-linux/**",
         "${vcpkgRoot}/x64-linux/include"
       ],
       "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
@@ -17,7 +17,7 @@
       "compilerPath": "/usr/bin/g++",
       "intelliSenseMode": "${default}",
       "configurationProvider": "ms-vscode.cmake-tools",
-      "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+      "compileCommands": "${workspaceFolder}/target/build/compile_commands.json"
     },
     {
       "name": "Mac",
@@ -30,7 +30,7 @@
       "cppStandard": "c++20",
       "intelliSenseMode": "macos-clang-arm64",
       "configurationProvider": "ms-vscode.cmake-tools",
-      "compilerPath": "${workspaceFolder}/build/compile_commands.json"
+      "compilerPath": "${workspaceFolder}/target/build/compile_commands.json"
     }
   ],
   "version": 4

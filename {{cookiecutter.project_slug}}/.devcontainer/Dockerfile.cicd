@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/Microsoft/vcpkg.git /opt/vcpkg && \
     cd /opt/vcpkg && \
     ./bootstrap-vcpkg.sh
-ENV PATH=$PATH:/opt/vcpkg
 
 WORKDIR /home
 COPY . .
@@ -35,12 +34,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install only the runtime dependencies
 RUN apt-get update && apt-get install -y \
     python3 \
-    cmake \
     && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home
-COPY --from=build /opt/vcpkg /opt/vcpkg
 COPY --from=build /home/target/build /home/target/build
 
 WORKDIR /home/target/build

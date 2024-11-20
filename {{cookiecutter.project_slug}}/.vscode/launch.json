@@ -2,16 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug (Test - Linux)",
+      "name": "(Linux) Debug: Test",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/test/src/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}_test_addition",
+      "program": "${workspaceFolder}/target/build/test/src/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}_test_addition",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
-      "preLaunchTask": "build",
+      "preLaunchTask": "build_debug",
       "MIMode": "gdb",
       "miDebuggerPath": "/usr/bin/gdb",
       "logging": {
@@ -28,10 +28,10 @@
       ]
     },
     {
-      "name": "Debug (Example - Linux)",
+      "name": "(Linux) Debug: Example",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/example/example/empty_example",
+      "program": "${workspaceFolder}/target/build/example/example/empty_example",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
@@ -54,7 +54,7 @@
       ]
     },
     {
-      "name": "Release (Example - Linux)",
+      "name": "(Linux) Release: Example",
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/release/example/example/empty_example",
@@ -80,27 +80,27 @@
       ]
     },
     {
-      "name": "Debug (Test - Mac)",
+      "name": "(Mac) Debug: Test",
       "type": "lldb",
       "request": "launch",
-      "program": "${workspaceFolder}/build/test/src/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}_test_addition",
+      "program": "${workspaceFolder}/target/build/test/src/{{cookiecutter.project_slug}}/{{cookiecutter.project_slug}}_test_addition",
       "args": [],
       "cwd": "${workspaceFolder}",
       "env": {},
-      "preLaunchTask": "build"
+      "preLaunchTask": "build_debug"
     },
     {
-      "name": "Debug (Example - Mac)",
+      "name": "(Mac) Debug: Example",
       "type": "lldb",
       "request": "launch",
-      "program": "${workspaceFolder}/build/example/example/empty_example",
+      "program": "${workspaceFolder}/target/build/example/example/empty_example",
       "args": [],
       "cwd": "${workspaceFolder}",
       "env": {},
-      "preLaunchTask": "build"
+      "preLaunchTask": "build_debug"
     },
     {
-      "name": "Release (Example - Mac)",
+      "name": "(Mac) Release: Example",
       "type": "lldb",
       "request": "launch",
       "program": "${workspaceFolder}/release/example/example/empty_example",
@@ -108,6 +108,58 @@
       "cwd": "${workspaceFolder}",
       "env": {},
       "preLaunchTask": "build_release"
-    }
+    },
+    {
+      "name": "(Windows) Debug: Test",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/target/build/test/src/{{cookiecutter.project_slug}}/Debug/{{cookiecutter.project_slug}}_test_addition",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "windows_build_debug",
+      "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+      "logging": {
+        "engineLogging": true,
+        "trace": true,
+        "traceResponse": true
+      }
+    },
+    {
+      "name": "(Windows) Debug: Example",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/target/build/example/example/Debug/empty_example",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "windows_build_debug",
+      "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+      "logging": {
+        "engineLogging": true,
+        "trace": true,
+        "traceResponse": true
+      }
+    },
   ]
 }

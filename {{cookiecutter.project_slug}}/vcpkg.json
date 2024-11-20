@@ -2,7 +2,7 @@
   "name": "{{cookiecutter.project_slug}}",
   "version-semver": "0.0.0",
   "dependencies": ["fmt"],
-  "default-features": ["test"],
+  "default-features": [],
   "features": {
     "test": {
       "description": "Dependencies for testing",
@@ -12,6 +12,10 @@
           "version>=": "3.5.3"
         }
       ]
+    },
+    "dev": {
+      "description": "Dev-only dependencies",
+      "dependencies": []
     }
   },
   "builtin-baseline": "02745e0f4749d1f51d2025824209408f5a6c3614"

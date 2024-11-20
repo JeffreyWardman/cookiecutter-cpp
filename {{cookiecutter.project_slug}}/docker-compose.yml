@@ -1,0 +1,5 @@
+services:
+  cicd:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile.cicd

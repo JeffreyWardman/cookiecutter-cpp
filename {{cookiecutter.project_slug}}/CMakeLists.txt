@@ -6,15 +6,13 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ---- Declare CMake Environments ----
-
 include (cmake/environment.cmake)
 
 # ---- Declare VCPKG Environment ----
-
 include(cmake/3rdparty/vcpkg.cmake)
+set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/${TRIPLET}")
 
 # ---- Declare project ----
-
 project(
     {{cookiecutter.project_slug}}
     VERSION 0.0.0
@@ -24,15 +22,28 @@ project(
 
 include(cmake/project-is-top-level.cmake)
 
-# ---- Declare library ----
+# ---- Enable SIMD (if available) ----
+include(cmake/simd.cmake)
 
+# ---- Declare library ----
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/{{cookiecutter.project_slug}})
 set(THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
+
+
+set(SOURCE_FILES
+  ${SOURCE_DIR}/addition.cpp
+)
+
+# Conditionally append developer mode sources
+if(DEVELOPER_MODE)
+    list(APPEND SOURCE_FILES
+    )
+endif()
 
 add_library(
     {{cookiecutter.project_slug}}
     STATIC
-    ${SOURCE_DIR}/addition.cpp  
+    ${SOURCE_FILES}
 )
 target_include_directories(
   {{cookiecutter.project_slug}} ${warning_guard}
@@ -45,16 +56,15 @@ target_include_directories(
 # ---- Include cmake libraries here ----
 include(cmake/3rdparty/fmt.cmake)
 
-# ---- Examples ----
-
-option(BUILD_EXAMPLES "Build examples tree." ON)
-if(BUILD_EXAMPLES)
-  add_subdirectory(example)
+# ---- Tests ----
+if (BUILD_TESTS)
+  include(CTest)
+  add_subdirectory(test)
 endif()
 
 # ---- Developer mode ----
 
-if(NOT {{cookiecutter.project_slug.upper()}}_DEVELOPER_MODE)
+if(NOT DEVELOPER_MODE)
   return()
 endif()
 
