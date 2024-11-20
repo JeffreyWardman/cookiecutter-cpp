@@ -3,8 +3,11 @@ cmake_minimum_required(VERSION 3.14)
 project({{cookiecutter.project_slug}}Examples CXX)
 
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")  # -Wpedantic
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
+if (NOT WIN32 AND NOT WIN64)
+  set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+else()
+  set(CMAKE_CXX_FLAGS_DEBUG "-g")
+endif()
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 include(../cmake/project-is-top-level.cmake)
@@ -31,9 +34,13 @@ function(add_example NAME)
 
   add_executable("${TARGET_NAME}" "${NAME}.cpp")
   set_target_properties("${TARGET_NAME}" PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_DIR}")
-  target_link_libraries("${NAME}" PRIVATE {{cookiecutter.project_slug}})
+  target_link_libraries("${TARGET_NAME}" PRIVATE {{cookiecutter.project_slug}})
   target_compile_features("${TARGET_NAME}" PRIVATE cxx_std_23)
-  
+  # Define compile definitions if developer mode is enabled
+  if(DEVELOPER_MODE)
+    target_compile_definitions("${TARGET_NAME}" PRIVATE DEVELOPER_MODE)
+  endif()
+    
   # Also include the private headers
   target_include_directories(${TARGET_NAME} PRIVATE $<TARGET_PROPERTY:{{cookiecutter.project_slug}},INCLUDE_DIRECTORIES>)
 

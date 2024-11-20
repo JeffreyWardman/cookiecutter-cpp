@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build",
+      "label": "build_debug",
       "type": "shell",
       "command": "/usr/bin/make",
       "args": ["build_debug"],
@@ -24,6 +24,11 @@
       },
       "problemMatcher": ["$gcc"],
       "detail": "Generated task by Debugger."
+    },
+    {
+      "label": "windows_build_debug",
+      "type": "shell",
+      "command": "vcpkg install --x-feature=test --x-feature=dev && cmake -S . -B target/build -D CMAKE_BUILD_TYPE=Debug -D ENABLE_COVERAGE=ON -D DEVELOPER_MODE=ON -D BUILD_TESTS=ON -D ENABLE_SIMD=ON && cmake --build target/build --config Debug -j 16 && cmake --install target/build"
     }
   ]
 }

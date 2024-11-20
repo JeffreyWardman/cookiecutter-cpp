@@ -15,7 +15,10 @@ endif()
 include(../cmake/3rdparty/catch2.cmake)
 
 # ---- Tests ----
-
+# Copy data
+set(SOURCE_DATA_DIR ${CMAKE_SOURCE_DIR}/test/data)
+set(TARGET_DATA_DIR ${CMAKE_BINARY_DIR}/test/test)
+file(COPY ${SOURCE_DATA_DIR} DESTINATION ${TARGET_DATA_DIR})
 
 # Define the function to get filename without path
 function(get_filename_without_path filepath result)
@@ -26,60 +29,41 @@ endfunction()
 # Define the function to find and add Catch2 tests
 function(add_catch2_tests base_directory)
     # Find all subdirectories in the specified base directory
-    file(GLOB subdirectories RELATIVE ${CMAKE_SOURCE_DIR}/test/${base_directory} ${base_directory}/*)
+    file(GLOB_RECURSE test_files RELATIVE ${CMAKE_SOURCE_DIR}/test/ ${base_directory}/*)
+    foreach(test_file ${test_files})
+        # Get the relative path to use in the test name
+        string(REPLACE "/" "_" test_name ${test_file}) # Replace '/' with '_' for test name uniqueness
 
-    foreach(subdirectory ${subdirectories})
-        if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/test/${base_directory}/${subdirectory})
-            # Process each subdirectory separately
-            file(GLOB test_files "${CMAKE_SOURCE_DIR}/test/${base_directory}/${subdirectory}/*.cpp")
+        # Strip out 'src/{{cookiecutter.project_slug}}' from the executable name if it's part of the path
+        string(REPLACE "src_{{cookiecutter.project_slug}}_" "" test_name ${test_name})
 
-            foreach(test_file ${test_files})
-                # Get the filename without path for the test executable name
-                get_filename_component(test_name ${test_file} NAME_WE)
+        # Remove the .cpp extension from the test name
+        get_filename_component(test_name ${test_name} NAME_WE)
 
-                # Create a test executable for each test file
-                add_executable(${subdirectory}_${test_name} ${test_file})
+        # Create a test executable for each test file
+        add_executable(${test_name} ${CMAKE_SOURCE_DIR}/test/${test_file})
 
-                # Set the output directory to match the source directory structure
-                set_target_properties(${subdirectory}_${test_name} PROPERTIES
-                    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/${base_directory}/${subdirectory}")
+        # Set the output directory based on the folder structure of the test file (this is for the executable)
+        get_filename_component(test_dir ${test_file} DIRECTORY)
+        set_target_properties(${test_name} PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/${test_dir}")  # This places only the executable
 
-                # Link {{cookiecutter.project_slug}} and Catch2 to the test executable
-                target_link_libraries(${subdirectory}_${test_name} PRIVATE {{cookiecutter.project_slug}} Catch2::Catch2WithMain)
-                
-                # Also include the private headers
-                target_include_directories(${subdirectory}_${test_name} PRIVATE $<TARGET_PROPERTY:{{cookiecutter.project_slug}},INCLUDE_DIRECTORIES>)
+        # Link {{cookiecutter.project_slug}} and Catch2 to the test executable
+        target_link_libraries(${test_name} PRIVATE {{cookiecutter.project_slug}} Catch2::Catch2WithMain)
 
-                # Define compile features
-                target_compile_features(${subdirectory}_${test_name} PRIVATE cxx_std_23)
+        # Include the private headers
+        target_include_directories(${test_name} PRIVATE $<TARGET_PROPERTY:{{cookiecutter.project_slug}},INCLUDE_DIRECTORIES>)
 
-                # Add the test to CTest
-                add_test(NAME ${subdirectory}_${test_name} COMMAND ${subdirectory}_${test_name})
-            endforeach()
-        else()
-            # Handle files directly in the base directory
-            if("${subdirectory}" MATCHES ".*\\.cpp$")
-                get_filename_component(test_name ${subdirectory} NAME_WE)
-                add_executable(${test_name} ${CMAKE_SOURCE_DIR}/test/${base_directory}/${subdirectory})
+        # Define compile features
+        target_compile_features(${test_name} PRIVATE cxx_std_23)
 
-                # Set the output directory to match the source directory structure
-                set_target_properties(${test_name} PROPERTIES
-                    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/${base_directory}")
-
-                target_link_libraries(${test_name} PRIVATE {{cookiecutter.project_slug}} Catch2::Catch2WithMain)
-
-                # Define compile features
-                target_compile_features(${test_name} PRIVATE cxx_std_23)
-
-                add_test(NAME ${test_name} COMMAND ${test_name})
-            endif()
-        endif()
+        # Add the test to CTest
+        add_test(NAME ${test_name} COMMAND ${test_name})
     endforeach()
 endfunction()
 
-# Example usage: Add all tests from the test/src directory
+# Add all tests from test/src
 add_catch2_tests(src)
 
-# ---- End-of-file commands ----
-
+# ---- Create Test folder ----  # TODO needed?
 add_folders(Test)

@@ -6,5 +6,4 @@ compile_commands.json
 vcpkg_installed/
 
 .cache/
-build/
-release/
+target/
