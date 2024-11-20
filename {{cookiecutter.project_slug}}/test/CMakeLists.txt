@@ -64,6 +64,3 @@ endfunction()
 
 # Add all tests from test/src
 add_catch2_tests(src)
-
-# ---- Create Test folder ----  # TODO needed?
-add_folders(Test)
