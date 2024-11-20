@@ -1,47 +1,48 @@
-# Stage 1: Build stage
-FROM ubuntu:22.04 AS build
-ENV DEBIAN_FRONTEND=noninteractive
+depends:
+	vcpkg integrate install
+	vcpkg install
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
-    cmake \
-    curl \
-    zip \
-    unzip \
-    tar \
-    pkg-config \
-    python3 \
-    python3-pip \
-    && \
-    rm -rf /var/lib/apt/lists/*
+build_release:
+	cmake -S . -B target/release -D CMAKE_BUILD_TYPE=Release
+	cmake --build target/release --config Release
+	cmake --install target/release
 
-# Install vcpkg
-RUN git clone https://github.com/Microsoft/vcpkg.git /opt/vcpkg && \
-    cd /opt/vcpkg && \
-    ./bootstrap-vcpkg.sh
-ENV PATH=$PATH:/opt/vcpkg
+build_debug:
+	cmake -S . -B target/build \
+		-D CMAKE_BUILD_TYPE=Debug \
+		-D BUILD_DOCS=OFF \
+		-D BUILD_TESTS=ON \
+		-D ENABLE_COVERAGE=ON \
+		-D DEVELOPER_MODE=ON \
+		-D ENABLE_SIMD=ON
 
-WORKDIR /home
-COPY . .
+	cmake --build target/build --config Debug -j 16
+	cmake --install target/build
 
-# Build the project
-RUN make build_debug_cicd
+build_debug_cicd:
+	cmake -S . -B target/build \
+		-D CMAKE_BUILD_TYPE=Debug \
+		-D BUILD_DOCS=OFF \
+		-D BUILD_TESTS=ON \
+		-D ENABLE_COVERAGE=ON \
+		-D DEVELOPER_MODE=ON \
+		-D ENABLE_SIMD=OFF
 
-# Stage 2: Test stage
-FROM ubuntu:22.04 AS PROD
-ENV DEBIAN_FRONTEND=noninteractive
+	cmake --build target/build --config Debug -j 16
+	cmake --install target/build
 
-# Install only the runtime dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    cmake \
-    && \
-    rm -rf /var/lib/apt/lists/*
+run_tests:
+	cd target/build && ctest --output-on-failure -j16 && cd ..
 
-WORKDIR /home
-COPY --from=build /opt/vcpkg /opt/vcpkg
-COPY --from=build /home/target/build /home/target/build
-
-WORKDIR /home/target/build
-CMD ["ctest", "--output-on-failure", "-j4"]
+run_docs:
+	cmake -S . -B build \
+		-D CMAKE_BUILD_TYPE=Debug \
+		-D BUILD_DOCS=ON \
+		-D BUILD_TESTS=OFF \
+		-D ENABLE_COVERAGE=OFF \
+		-D DEVELOPER_MODE=ON \
+        -D ENABLE_SIMD=OFF
+	cmake --build target/build --config Debug
+	cmake --install target/build
+	doxygen target/build/docs/Doxyfile
+	python3 -m http.server 8000 --directory target/build/docs/html

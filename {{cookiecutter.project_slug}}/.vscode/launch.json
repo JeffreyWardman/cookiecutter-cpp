@@ -113,7 +113,7 @@
       "name": "(Windows) Debug: Test",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/target/build/test/src/{{cookiecutter.project_slug}}/Debug/{{cookiecutter.project_slug}}_test_addition",
+      "program": "${workspaceFolder}/target/build/test/src/{{cookiecutter.project_slug}}/Debug/test_addition",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
