@@ -3,11 +3,13 @@ depends:
 	vcpkg install
 
 build_release:
+	vcpkg install
 	cmake -S . -B target/release -D CMAKE_BUILD_TYPE=Release
 	cmake --build target/release --config Release
 	cmake --install target/release
 
 build_debug:
+	vcpkg install --x-feature=test
 	cmake -S . -B target/build \
 		-D CMAKE_BUILD_TYPE=Debug \
 		-D BUILD_DOCS=OFF \
@@ -20,6 +22,7 @@ build_debug:
 	cmake --install target/build
 
 build_debug_cicd:
+	vcpkg install --x-feature=test
 	cmake -S . -B target/build \
 		-D CMAKE_BUILD_TYPE=Debug \
 		-D BUILD_DOCS=OFF \
