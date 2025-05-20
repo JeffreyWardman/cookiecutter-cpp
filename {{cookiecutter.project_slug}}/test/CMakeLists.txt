@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 
 project({{cookiecutter.project_slug}}Tests LANGUAGES CXX)
 
@@ -15,6 +15,7 @@ endif()
 include(../cmake/3rdparty/catch2.cmake)
 
 # ---- Tests ----
+
 # Copy data
 set(SOURCE_DATA_DIR ${CMAKE_SOURCE_DIR}/test/data)
 set(TARGET_DATA_DIR ${CMAKE_BINARY_DIR}/test/test)
@@ -52,10 +53,12 @@ function(add_catch2_tests base_directory)
         target_link_libraries(${test_name} PRIVATE {{cookiecutter.project_slug}} Catch2::Catch2WithMain)
 
         # Include the private headers
-        target_include_directories(${test_name} PRIVATE $<TARGET_PROPERTY:{{cookiecutter.project_slug}},INCLUDE_DIRECTORIES>)
+        target_include_directories(${test_name} PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
         # Define compile features
         target_compile_features(${test_name} PRIVATE cxx_std_23)
+        target_compile_options(${test_name} PRIVATE -fsanitize=address)
+        target_link_options(${test_name} PRIVATE -fsanitize=address)
 
         # Add the test to CTest
         add_test(NAME ${test_name} COMMAND ${test_name})
@@ -64,3 +67,7 @@ endfunction()
 
 # Add all tests from test/src
 add_catch2_tests(src)
+
+# ---- End-of-file commands ----
+
+add_folders(Test)

@@ -17,7 +17,7 @@ except ImportError:
 
 
 def update_vcpkg_version():
-    with open("pyproject.toml", "r") as f:
+    with open(".cz.toml", "r") as f:
         toml_data = toml.load(f)
 
     new_version = toml_data["tool"]["commitizen"]["version"]

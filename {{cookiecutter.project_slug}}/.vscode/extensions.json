@@ -7,7 +7,6 @@
     "ms-vscode.cpptools",
     "naumovs.color-highlight",
     "sonarsource.sonarlint-vscode",
-    "twxs.cmake",
     "vadimcn.vscode-lldb",
     "xaver.clang-format"
   ]

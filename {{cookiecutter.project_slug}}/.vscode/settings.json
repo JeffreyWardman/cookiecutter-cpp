@@ -12,6 +12,12 @@
 
   "sonarlint.pathToCompileCommands": "${workspaceFolder}/target/build/compile_commands.json",
 
+  "cmake.useCMakePresets": "auto",
+  "cmake.pinnedCommands": [
+    "workbench.action.tasks.configureTaskRunner",
+    "workbench.action.tasks.runTask"
+  ],
+
   "editor.tabSize": 4,
   "editor.insertSpaces": true,
   "[yaml]": {

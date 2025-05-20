@@ -9,7 +9,7 @@
       "dependencies": [
         {
           "name": "catch2",
-          "version>=": "3.5.3"
+          "version>=": "3.8.1"
         }
       ]
     },
@@ -18,5 +18,5 @@
       "dependencies": []
     }
   },
-  "builtin-baseline": "02745e0f4749d1f51d2025824209408f5a6c3614"
+  "builtin-baseline": "d9ccd77bb554e67137f3f754a2e2f11f4188c82c"
 }

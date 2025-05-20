@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -10,7 +10,6 @@ include (cmake/environment.cmake)
 
 # ---- Declare VCPKG Environment ----
 include(cmake/3rdparty/vcpkg.cmake)
-set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/${TRIPLET}")
 
 # ---- Declare project ----
 project(
@@ -29,7 +28,6 @@ include(cmake/simd.cmake)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/{{cookiecutter.project_slug}})
 set(THIRD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
 
-
 set(SOURCE_FILES
   ${SOURCE_DIR}/addition.cpp
 )
@@ -45,6 +43,7 @@ add_library(
     STATIC
     ${SOURCE_FILES}
 )
+
 target_include_directories(
   {{cookiecutter.project_slug}} ${warning_guard}
   PUBLIC
@@ -62,10 +61,13 @@ if (BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
-# ---- Developer mode ----
-
-if(NOT DEVELOPER_MODE)
-  return()
+# ---- Examples ----
+if(BUILD_EXAMPLES)
+  add_subdirectory(example)
 endif()
 
-include(cmake/dev-mode.cmake)
+# ---- Developer mode ----
+
+if(DEVELOPER_MODE)
+  include(cmake/dev-mode.cmake)
+endif()

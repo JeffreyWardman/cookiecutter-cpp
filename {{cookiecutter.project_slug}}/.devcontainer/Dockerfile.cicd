@@ -1,5 +1,4 @@
-# Stage 1: Build stage
-FROM ubuntu:22.04 AS build
+FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
@@ -8,11 +7,9 @@ RUN apt-get update && apt-get install -y \
     cmake \
     curl \
     zip \
-    unzip \
-    tar \
     pkg-config \
-    python3 \
-    python3-pip \
+    ninja-build \
+    clang \
     && \
     rm -rf /var/lib/apt/lists/*
 
@@ -26,22 +23,6 @@ WORKDIR /home
 COPY . .
 
 # Build the project
-RUN make build_debug_cicd
+RUN /opt/vcpkg/vcpkg install && make build_cicd
 
-# Stage 2: Test stage
-FROM ubuntu:22.04 AS PROD
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install only the runtime dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    cmake \
-    && \
-    rm -rf /var/lib/apt/lists/*
-
-WORKDIR /home
-COPY --from=build /opt/vcpkg /opt/vcpkg
-COPY --from=build /home/target/build /home/target/build
-
-WORKDIR /home/target/build
-CMD ["ctest", "--output-on-failure", "-j4"]
+CMD ["ctest", "--preset", "linux-cicd", "--output-on-failure", "-j4"]

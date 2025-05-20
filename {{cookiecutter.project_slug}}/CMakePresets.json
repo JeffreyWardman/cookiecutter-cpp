@@ -1,0 +1,195 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 16,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": false,
+      "description": "Default preset with custom CXX flags and Clang compiler",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/default",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_BUILD_TOOL": "Ninja",
+        "ENABLE_SIMD": "ON"
+      }
+    },
+    {
+      "name": "debug",
+      "inherits": "default",
+      "description": "Debug build preset",
+      "binaryDir": "${sourceDir}/build/debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_MANIFEST_FEATURES": "test",
+        "DEVELOPER_MODE": "ON",
+        "BUILD_EXAMPLES": "ON",
+        "BUILD_TESTS": "ON",
+        "ENABLE_COVERAGE": "ON"
+      }
+    },
+    {
+      "name": "release",
+      "inherits": "default",
+      "description": "Release build preset",
+      "binaryDir": "${sourceDir}/build/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_EXAMPLES": "ON"
+      }
+    },
+    {
+      "name": "macos-debug",
+      "inherits": "debug",
+      "description": "Debug build for macOS",
+      "binaryDir": "${sourceDir}/target/macos/debug",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "arm64"
+      }
+    },
+    {
+      "name": "macos-release",
+      "inherits": "release",
+      "description": "Release build for macOS (arm64 only)",
+      "binaryDir": "${sourceDir}/target/macos/release",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "arm64"
+      }
+    },
+    {
+      "name": "linux-debug",
+      "inherits": "debug",
+      "description": "Debug build for Linux",
+      "binaryDir": "${sourceDir}/target/linux/debug"
+    },
+    {
+      "name": "linux-release",
+      "inherits": "release",
+      "description": "Release build for Linux",
+      "binaryDir": "${sourceDir}/target/linux/release"
+    },
+    {
+      "name": "linux-cicd",
+      "inherits": "linux-debug",
+      "description": "CI/CD build for Linux",
+      "binaryDir": "${sourceDir}/target/linux/cicd"
+    },
+    {
+      "name": "windows-debug",
+      "inherits": "debug",
+      "description": "Debug build for Windows",
+      "binaryDir": "${sourceDir}/target/windows/debug",
+      "cacheVariables": {
+        "CMAKE_GENERATOR": "Visual Studio 16 2019"
+      }
+    },
+    {
+      "name": "windows-release",
+      "inherits": "release",
+      "description": "Release build for Windows",
+      "binaryDir": "${sourceDir}/target/windows/release",
+      "cacheVariables": {
+        "CMAKE_GENERATOR": "Visual Studio 16 2019"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "macos-debug",
+      "configurePreset": "macos-debug",
+      "description": "Build using the macOS debug preset"
+    },
+    {
+      "name": "macos-release",
+      "configurePreset": "macos-release",
+      "description": "Build using the macOS release preset"
+    },
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug",
+      "description": "Build using the Linux debug preset"
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "description": "Build using the Linux release preset"
+    },
+    {
+      "name": "linux-cicd",
+      "configurePreset": "linux-cicd",
+      "description": "Build using the Linux cicd preset"
+    },
+    {
+      "name": "windows-debug",
+      "configurePreset": "windows-debug",
+      "description": "Build using the Windows debug preset"
+    },
+    {
+      "name": "windows-release",
+      "configurePreset": "windows-release",
+      "description": "Build using the Windows release preset"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "macos-debug",
+      "configurePreset": "macos-debug",
+      "description": "Run tests using the macOS debug preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "macos-release",
+      "configurePreset": "macos-release",
+      "description": "Run tests using the macOS release preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug",
+      "description": "Run tests using the Linux debug preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "description": "Run tests using the Linux release preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "linux-cicd",
+      "configurePreset": "linux-cicd",
+      "description": "Run tests using the Linux cicd preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "windows-debug",
+      "configurePreset": "windows-debug",
+      "description": "Run tests using the Windows debug preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "windows-release",
+      "configurePreset": "windows-release",
+      "description": "Run tests using the Windows release preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

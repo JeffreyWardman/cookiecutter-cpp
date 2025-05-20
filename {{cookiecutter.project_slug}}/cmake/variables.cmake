@@ -7,6 +7,7 @@
 if(PROJECT_IS_TOP_LEVEL)
   option(DEVELOPER_MODE "Enable developer mode" OFF)
   option(BUILD_SHARED_LIBS "Build shared libs." OFF)
+  option(BUILD_EXAMPLES "Build examples" OFF)
   option(BUILD_TESTS "Build unit tests" OFF)
   option(ENABLE_SIMD "Enable SIMD." ON)
 endif()

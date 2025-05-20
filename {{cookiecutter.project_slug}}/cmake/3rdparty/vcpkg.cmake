@@ -1,6 +1,6 @@
 # Add manifest features
 if (DEVELOPER_MODE)
-  set(VCPKG_MANIFEST_FEATURES "test,dev")
+  set(VCPKG_MANIFEST_FEATURES "test")
 endif()
 
 # Set path of vcpkg_installed folder
