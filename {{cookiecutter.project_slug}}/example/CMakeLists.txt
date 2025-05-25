@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.25)
 
 project({{cookiecutter.project_slug}}Examples CXX)
 
@@ -8,7 +8,6 @@ if (NOT WIN32 AND NOT WIN64)
 else()
   set(CMAKE_CXX_FLAGS_DEBUG "-g")
 endif()
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 include(../cmake/project-is-top-level.cmake)
 include(../cmake/folders.cmake)
