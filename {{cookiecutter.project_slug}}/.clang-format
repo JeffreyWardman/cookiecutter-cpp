@@ -11,3 +11,4 @@ BinPackParameters: false
 AccessModifierOffset: -4
 AllowShortIfStatementsOnASingleLine: false
 AllowShortBlocksOnASingleLine: false
+InsertBraces: true

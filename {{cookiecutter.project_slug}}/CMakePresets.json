@@ -77,7 +77,10 @@
       "name": "linux-cicd",
       "inherits": "linux-debug",
       "description": "CI/CD build for Linux",
-      "binaryDir": "${sourceDir}/target/linux/cicd"
+      "binaryDir": "${sourceDir}/target/linux/cicd",
+      "cacheVariables": {
+        "BUILD_DOCS": "OFF"
+      }
     },
     {
       "name": "windows-debug",

@@ -14,31 +14,44 @@ DEBUG_PRESET=$(PLATFORM)-debug
 RELEASE_PRESET=$(PLATFORM)-release
 CICD_PRESET=$(PLATFORM)-cicd
 
-build_release:
-	echo "Building with preset: $(RELEASE_PRESET)"
-	cmake --preset $(RELEASE_PRESET)
-	cmake --build --preset $(RELEASE_PRESET) -j16
+.PHONY: build_release
+build_release:  ## Build release version
+	@echo "Building with preset: $(RELEASE_PRESET)"
+	@cmake --preset $(RELEASE_PRESET)
+	@cmake --build --preset $(RELEASE_PRESET) -j16
 
-build_debug:
-	echo "Building with preset: $(DEBUG_PRESET)"
-	cmake --preset $(DEBUG_PRESET)
-	cmake --build --preset $(DEBUG_PRESET) -j16
+.PHONY: build_debug
+build_debug:  ## Build debug version
+	@echo "Building with preset: $(DEBUG_PRESET)"
+	@cmake --preset $(DEBUG_PRESET)
+	@cmake --build --preset $(DEBUG_PRESET) -j16
 
-build_cicd:
-	echo "Building with preset: $(CICD_PRESET)"
-	cmake --preset $(CICD_PRESET)
-	cmake --build --preset $(CICD_PRESET) -j16
+.PHONY: build_cicd
+build_cicd:  ## Build CI/CD version
+	@echo "Building with preset: $(CICD_PRESET)"
+	@cmake --preset $(CICD_PRESET)
+	@cmake --build --preset $(CICD_PRESET) -j16
 
-run_tests:
-	echo "Running tests with preset: $(DEBUG_PRESET)"
-	ctest --preset $(DEBUG_PRESET) --output-on-failure -j16 --verbose
+.PHONY: run_tests
+run_tests:  ## Run unit tests
+	@echo "Running tests with preset: $(DEBUG_PRESET)"
+	@ctest --preset $(DEBUG_PRESET) --output-on-failure -j16 --verbose
 
-run_docs:
-	echo "Building docs with preset: $(DEBUG_PRESET)"
-	cmake --preset $(DEBUG_PRESET) -D BUILD_DOCS=ON
-	cmake --build --preset $(DEBUG_PRESET) -j16
-	doxygen target/build/docs/Doxyfile
-	python3 -m http.server 8000 --directory target/build/docs/html
+.PHONY: run_docs
+run_docs:  ## Build and serve documentation
+	@echo "Building docs with preset: $(DEBUG_PRESET)"
+	@cmake --preset $(DEBUG_PRESET) -D BUILD_DOCS=ON
+	@cmake --build --preset $(DEBUG_PRESET) -j16
+	@doxygen target/build/docs/Doxyfile
+	@python3 -m http.server 8000 --directory target/build/docs/html
 
-image:
-	docker compose build
+.PHONY: image
+image:  ## Build docker image
+	@docker compose build
+
+.PHONY: help
+help:
+	@python3 -c "import re; \
+	[[print(f'\033[36m{m[0]:<20}\033[0m {m[1]}') for m in re.findall(r'^([a-zA-Z_-]+):.*?## (.*)$$', open(makefile).read(), re.M)] for makefile in ('$(MAKEFILE_LIST)').strip().split()]"
+
+.DEFAULT_GOAL := help

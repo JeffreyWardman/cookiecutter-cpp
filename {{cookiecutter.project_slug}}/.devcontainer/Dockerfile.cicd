@@ -1,10 +1,12 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     build-essential \
     ccache \
-    clang \
+    clang-15 \
+    clang-format-15 \
+    clang-tidy-15 \
     cmake \
     curl \
     git \
@@ -13,7 +15,11 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     zip \
     && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 150 && \
+    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 150 && \
+    update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-15 150 && \
+    update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 150
 
 # Install vcpkg
 RUN git clone https://github.com/Microsoft/vcpkg.git /opt/vcpkg && \
@@ -22,9 +28,13 @@ RUN git clone https://github.com/Microsoft/vcpkg.git /opt/vcpkg && \
 ENV PATH=$PATH:/opt/vcpkg
 
 WORKDIR /home
-COPY . .
+
+# Install dependencies from vcpkg
+COPY vcpkg.json /home/vcpkg.json
+RUN /opt/vcpkg/vcpkg install
 
 # Build the project
-RUN /opt/vcpkg/vcpkg install && make build_cicd
+COPY . .
+RUN make build_cicd
 
 CMD ["ctest", "--preset", "linux-cicd", "--output-on-failure", "-j4"]
