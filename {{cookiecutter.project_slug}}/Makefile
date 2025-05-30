@@ -55,14 +55,18 @@ post_build_symlink:  ## Add compile_commands.json symlink to root directory
 
 .PHONY: lint_clang_tidy
 lint_clang_tidy:  ## Run clang-tidy static analysis
-	@find src -type f \( -name '*.cpp' -o -name '*.cc' -o -name '*.cxx' -o -name '*.h' -o -name '*.hpp' \) -print0 | xargs -0 -n 1 clang-tidy --warnings-as-errors -p .
+	@find src -type f \( -name '*.cpp' -o -name '*.cc' -o -name '*.cxx' -o -name '*.h' -o -name '*.hpp' \) -print0 | xargs -0 -n 1 clang-tidy --warnings-as-errors --config-file=.clang-tidy
 
 .PHONY: lint_clang_format
 lint_clang_format:  ## Check code style with clang-format
 	@find src -name '*.cpp' -o -name '*.h' | xargs clang-format --dry-run --Werror
 
 .PHONY: lint
-lint:  lint_clang_tidy lint_clang_format ## Run all linters
+lint:  ## Run all linters
+	@echo "🚀 ---------- Running clang-tidy ----------\n"
+	@$(MAKE) lint_clang_tidy
+	@echo "\n\n🚀 ---------- Running clang-format ----------\n"
+	@$(MAKE) lint_clang_format
 
 .PHONY: image
 image:  ## Build docker image
