@@ -19,18 +19,21 @@ build_release:  ## Build release version
 	@echo "Building with preset: $(RELEASE_PRESET)"
 	@cmake --preset $(RELEASE_PRESET)
 	@cmake --build --preset $(RELEASE_PRESET) -j16
+	@$(MAKE) BUILD_TYPE=release post_build_symlink
 
 .PHONY: build_debug
 build_debug:  ## Build debug version
 	@echo "Building with preset: $(DEBUG_PRESET)"
 	@cmake --preset $(DEBUG_PRESET)
 	@cmake --build --preset $(DEBUG_PRESET) -j16
+	@$(MAKE) BUILD_TYPE=debug post_build_symlink
 
 .PHONY: build_cicd
 build_cicd:  ## Build CI/CD version
 	@echo "Building with preset: $(CICD_PRESET)"
 	@cmake --preset $(CICD_PRESET)
 	@cmake --build --preset $(CICD_PRESET) -j16
+	@$(MAKE) BUILD_TYPE=cicd post_build_symlink
 
 .PHONY: run_tests
 run_tests:  ## Run unit tests
@@ -42,8 +45,24 @@ run_docs:  ## Build and serve documentation
 	@echo "Building docs with preset: $(DEBUG_PRESET)"
 	@cmake --preset $(DEBUG_PRESET) -D BUILD_DOCS=ON
 	@cmake --build --preset $(DEBUG_PRESET) -j16
+	@$(MAKE) BUILD_TYPE=debug post_build_symlink
 	@doxygen target/build/docs/Doxyfile
 	@python3 -m http.server 8000 --directory target/build/docs/html
+
+.PHONY: post_build_symlink
+post_build_symlink:  ## Add compile_commands.json symlink to root directory
+	@ln -sf target/$(PLATFORM)/$(BUILD_TYPE)/compile_commands.json ./compile_commands.json
+
+.PHONY: lint_clang_tidy
+lint_clang_tidy:  ## Run clang-tidy static analysis
+	@find src -type f \( -name '*.cpp' -o -name '*.cc' -o -name '*.cxx' -o -name '*.h' -o -name '*.hpp' \) -print0 | xargs -0 -n 1 clang-tidy --warnings-as-errors -p .
+
+.PHONY: lint_clang_format
+lint_clang_format:  ## Check code style with clang-format
+	@find src -name '*.cpp' -o -name '*.h' | xargs clang-format --dry-run --Werror
+
+.PHONY: lint
+lint:  lint_clang_tidy lint_clang_format ## Run all linters
 
 .PHONY: image
 image:  ## Build docker image

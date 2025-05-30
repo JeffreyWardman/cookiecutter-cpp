@@ -10,7 +10,7 @@
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "C_Cpp.formatting": "clangFormat",
 
-  "sonarlint.pathToCompileCommands": "${workspaceFolder}/target/build/compile_commands.json",
+  "sonarlint.pathToCompileCommands": "${workspaceFolder}/compile_commands.json",
 
   "cmake.useCMakePresets": "auto",
   "cmake.pinnedCommands": [

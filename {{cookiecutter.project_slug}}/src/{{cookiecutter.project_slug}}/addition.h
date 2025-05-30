@@ -2,4 +2,4 @@
 
 namespace {{cookiecutter.project_slug}} {
     auto addition(int a, int b) -> int;
-}
+}  // namespace {{cookiecutter.project_slug}}
