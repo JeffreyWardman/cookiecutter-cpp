@@ -28,7 +28,7 @@
     {
       "label": "windows_build_debug",
       "type": "shell",
-      "command": "cmake --preset windows-debug && && cmake --build --preset windows-debug -j16"
+      "command": "cmake --preset windows-debug && cmake --build --preset windows-debug -j16"
     }
   ]
 }
