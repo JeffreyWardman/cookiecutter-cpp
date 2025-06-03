@@ -39,6 +39,8 @@ CheckOptions:
     value: '<cmath>'
   - key: 'cppcoreguidelines-narrowing-conversions.PedanticMode'
     value: 'true'
+  - key: "hicpp-uppercase-literal-suffix"
+    value: "false"
   - key: 'readability-else-after-return.WarnOnUnfixable'
     value: 'true'
   - key: 'readability-else-after-return.WarnOnConditionVariables'
