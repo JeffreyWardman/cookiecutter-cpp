@@ -16,7 +16,8 @@ Checks: "*,\
   -misc-non-private-member-variables-in-classes,\
   -performance-*,\
   -readability-*,\
-  -hicpp-uppercase-literal-suffix"
+  -hicpp-uppercase-literal-suffix,\
+  -bugprone-easily-swappable-parameters"
 WarningsAsErrors: ""
 CheckOptions:
   - key: "bugprone-argument-comment.StrictMode"

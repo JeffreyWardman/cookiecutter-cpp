@@ -4,11 +4,7 @@ if (DEVELOPER_MODE)
 endif()
 
 # Set path of vcpkg_installed folder
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(VCPKG_INSTALLED_PATH "target/release/vcpkg_installed")
-else()
-    set(VCPKG_INSTALLED_PATH "target/build/vcpkg_installed")
-endif()
+set(VCPKG_INSTALLED_PATH "${CMAKE_BINARY_DIR}/vcpkg_installed")
 
 if(UNIX)
     set(VCPKG_PATH "/opt/vcpkg")
