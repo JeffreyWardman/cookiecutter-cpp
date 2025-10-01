@@ -1,20 +1,24 @@
-MAKE_JOBS ?= $(shell nproc)
-
 # Detect the platform and set the appropriate debug preset
-ifeq ($(shell uname), Darwin)
-    PLATFORM=macos
-else ifeq ($(shell uname), Linux)
-    PLATFORM=linux
-else ifeq ($(OS), Windows_NT)
+ifeq ($(OS), Windows_NT)
 	PLATFORM=windows
+	MAKE_JOBS ?= $(NUMBER_OF_PROCESSORS)
+else ifeq ($(shell uname), Darwin)
+	PLATFORM=macos
+	MAKE_JOBS ?= $(shell sysctl -n hw.logicalcpu)
+else ifeq ($(shell uname), Linux)
+	PLATFORM=linux
+	MAKE_JOBS ?= $(shell nproc)
 else
-    $(error Unsupported platform)
+	$(error Unsupported platform)
 endif
+MAKE_JOBS ?= 1
+
 
 # Set debug, release, and cicd presets based on the platform
 DEBUG_PRESET=$(PLATFORM)-debug
 RELEASE_PRESET=$(PLATFORM)-release
 CICD_PRESET=$(PLATFORM)-cicd
+TEST_PRESET?=$(DEBUG_PRESET)
 
 .PHONY: build_release
 build_release:  ## Build release version
@@ -37,9 +41,14 @@ build_cicd:  ## Build CI/CD version
 	@cmake --build --preset $(CICD_PRESET) -j$(MAKE_JOBS)
 	@$(MAKE) BUILD_TYPE=cicd post_build_symlink
 
+.PHONY: bump_version
+bump_version:  ## Apply patch to the source code
+	@echo "Bumping semantic version"
+	@python3 scripts/bump_version.py
+
 .PHONY: run_tests
 run_tests:  ## Run unit tests
-	@echo "Running tests with preset: $(DEBUG_PRESET)"
+	@echo "Running tests with preset: $(TEST_PRESET)"
 	@ctest --preset $(DEBUG_PRESET) --output-on-failure -j$(MAKE_JOBS) --verbose
 
 .PHONY: run_docs
@@ -52,12 +61,18 @@ run_docs:  ## Build and serve documentation
 	@python3 -m http.server 8000 --directory target/build/docs/html
 
 .PHONY: post_build_symlink
-post_build_symlink:  ## Add compile_commands.json symlink to root directory
+ifeq ($(PLATFORM),windows)
+post_build_symlink:  # Add compile_commands.json symlink to root directory
+	if exist compile_commands.json del compile_commands.json
+	copy target\windows\$(BUILD_TYPE)\compile_commands.json compile_commands.json
+else
+post_build_symlink:  # Add compile_commands.json symlink to root directory
 	@ln -sf target/$(PLATFORM)/$(BUILD_TYPE)/compile_commands.json ./compile_commands.json
+endif
 
 .PHONY: lint_clang_tidy
 lint_clang_tidy:  ## Run clang-tidy static analysis
-	@find src -type f \( -name '*.cpp' -o -name '*.cc' -o -name '*.cxx' -o -name '*.h' -o -name '*.hpp' \) -print0 | xargs -0 -n 1 clang-tidy --warnings-as-errors --config-file=.clang-tidy
+	@find src -type f \( -name '*.cpp' -o -name '*.cc' -o -name '*.cxx' -o -name '*.h' -o -name '*.hpp' \) -print0 | xargs -0 -n 1 clang-tidy --quiet --warnings-as-errors --config-file=.clang-tidy
 
 .PHONY: lint_clang_format
 lint_clang_format:  ## Check code style with clang-format

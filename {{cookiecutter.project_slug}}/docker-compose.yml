@@ -2,4 +2,4 @@ services:
   cicd:
     build:
       context: .
-      dockerfile: .devcontainer/Dockerfile.cicd
+      dockerfile: .devcontainer/cicd.Dockerfile

@@ -6,13 +6,14 @@ Checks: "*,\
   -google-readability-todo,\
   -altera-*,\
   -fuchsia-*,\
-  fuchsia-multiple-inheritance,\
+  -fuchsia-multiple-inheritance,\
   -google-*,\
   -llvm-header-guard,\
   -llvm-include-order,\
   -llvmlibc-*,\
   -modernize-use-nodiscard,\
   -modernize-use-trailing-return-type,\
+  -misc-include-cleaner,\
   -misc-non-private-member-variables-in-classes,\
   -performance-*,\
   -readability-*,\
@@ -160,3 +161,5 @@ CheckOptions:
     value: "camelBack"
   # - key: 'readability-identifier-naming.VirtualMethodCase'
   #   value: 'lower_case'
+  - key: "readability-braces-around-statements"
+    value: "true"

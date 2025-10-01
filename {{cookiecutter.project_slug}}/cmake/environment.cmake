@@ -2,21 +2,22 @@ if(UNIX AND NOT APPLE)
     set(TRIPLET "x64-linux")
     set(CMAKE_CXX_FLAGS "-Wall -Wextra")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+    set(CMAKE_CXX_FLAGS_Release "${CMAKE_CXX_FLAGS_Release} -O3")
 elseif(APPLE)
     # Apple Silicon-specific
     set(TRIPLET "arm64-osx")     
     set(CMAKE_CXX_FLAGS "-Wall -Wextra")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+    set(CMAKE_CXX_FLAGS_Release "${CMAKE_CXX_FLAGS_Release} -O3")
 elseif(WIN64)
     set(TRIPLET "x64-windows")
     # Prevent a "command line is too long" failure in Windows.
     set(CMAKE_NINJA_FORCE_RESPONSE_FILE "ON" CACHE BOOL "Force Ninja to use response files.")
+    set(CMAKE_CXX_FLAGS_Release "${CMAKE_CXX_FLAGS_Release} /O2")
 else()
     # Handle other/unknown platforms if necessary
     message("Unknown platform detected")
 endif()
-
-set(CMAKE_CXX_FLAGS_Release "${CMAKE_CXX_FLAGS_Release} -O3")
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
@@ -25,7 +26,7 @@ endif()
 
 # Use mold linker if available, or set platform-specific linker flags
 find_program(MOLD_PATH mold)
-if(MOLD_PATH)
+if(MOLD_PATH AND UNIX AND NOT APPLE)
     message(STATUS "Using mold linker: ${MOLD_PATH}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=mold")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fuse-ld=mold")

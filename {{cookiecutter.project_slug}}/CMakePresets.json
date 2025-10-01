@@ -53,6 +53,18 @@
       }
     },
     {
+      "name": "macos-cicd",
+      "inherits": "macos-debug",
+      "description": "CI/CD build for macOS",
+      "binaryDir": "${sourceDir}/target/macos/cicd",
+      "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "arm64",
+        "BUILD_DOCS": "OFF",
+        "BUILD_EXAMPLES": "OFF",
+        "BUILD_TESTS": "ON"
+      }
+    },
+    {
       "name": "macos-release",
       "inherits": "release",
       "description": "Release build for macOS (arm64 only)",
@@ -79,7 +91,9 @@
       "description": "CI/CD build for Linux",
       "binaryDir": "${sourceDir}/target/linux/cicd",
       "cacheVariables": {
-        "BUILD_DOCS": "OFF"
+        "BUILD_DOCS": "OFF",
+        "BUILD_EXAMPLES": "OFF",
+        "BUILD_TESTS": "ON"
       }
     },
     {
@@ -87,8 +101,26 @@
       "inherits": "debug",
       "description": "Debug build for Windows",
       "binaryDir": "${sourceDir}/target/windows/debug",
+      "generator": "Visual Studio 17 2022",
       "cacheVariables": {
-        "CMAKE_GENERATOR": "Visual Studio 16 2019"
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_GENERATOR": "Visual Studio 17 2022",
+        "MSVC_TOOLSET_VERSION": "143"
+      }
+    },
+    {
+      "name": "windows-cicd",
+      "inherits": "windows-debug",
+      "description": "CI/CD build for Windows",
+      "binaryDir": "${sourceDir}/target/windows/cicd",
+      "generator": "Visual Studio 17 2022",
+      "cacheVariables": {
+        "BUILD_DOCS": "OFF",
+        "BUILD_EXAMPLES": "OFF",
+        "BUILD_TESTS": "ON",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_GENERATOR": "Visual Studio 17 2022",
+        "MSVC_TOOLSET_VERSION": "143"
       }
     },
     {
@@ -96,8 +128,13 @@
       "inherits": "release",
       "description": "Release build for Windows",
       "binaryDir": "${sourceDir}/target/windows/release",
+      "generator": "Visual Studio 17 2022",
       "cacheVariables": {
-        "CMAKE_GENERATOR": "Visual Studio 16 2019"
+        "CMAKE_CXX_FLAGS_RELEASE": "/O2",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_GENERATOR": "Visual Studio 17 2022",
+        "MSVC_TOOLSET_VERSION": "143",
+        "BUILD_EXAMPLES": "OFF"
       }
     }
   ],
@@ -106,6 +143,11 @@
       "name": "macos-debug",
       "configurePreset": "macos-debug",
       "description": "Build using the macOS debug preset"
+    },
+    {
+      "name": "macos-cicd",
+      "configurePreset": "macos-cicd",
+      "description": "Build using the macOS cicd preset"
     },
     {
       "name": "macos-release",
@@ -129,11 +171,19 @@
     },
     {
       "name": "windows-debug",
+      "configuration": "Debug",
       "configurePreset": "windows-debug",
       "description": "Build using the Windows debug preset"
     },
     {
+      "name": "windows-cicd",
+      "configuration": "Debug",
+      "configurePreset": "windows-cicd",
+      "description": "Build using the Windows cicd preset"
+    },
+    {
       "name": "windows-release",
+      "configuration": "Release",
       "configurePreset": "windows-release",
       "description": "Build using the Windows release preset"
     }
@@ -143,6 +193,14 @@
       "name": "macos-debug",
       "configurePreset": "macos-debug",
       "description": "Run tests using the macOS debug preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "macos-cicd",
+      "configurePreset": "macos-cicd",
+      "description": "Run tests using the macOS cicd preset",
       "output": {
         "outputOnFailure": true
       }
@@ -183,6 +241,14 @@
       "name": "windows-debug",
       "configurePreset": "windows-debug",
       "description": "Run tests using the Windows debug preset",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "windows-cicd",
+      "configurePreset": "windows-cicd",
+      "description": "Run tests using the Windows cicd preset",
       "output": {
         "outputOnFailure": true
       }

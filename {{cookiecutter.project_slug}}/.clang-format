@@ -12,3 +12,8 @@ AccessModifierOffset: -4
 AllowShortIfStatementsOnASingleLine: false
 AllowShortBlocksOnASingleLine: false
 InsertBraces: true
+InsertNewlineAtEOF: true
+KeepEmptyLinesAtEOF: true
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Left

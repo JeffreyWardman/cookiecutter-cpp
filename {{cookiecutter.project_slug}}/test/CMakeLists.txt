@@ -57,8 +57,10 @@ function(add_catch2_tests base_directory)
 
         # Define compile features
         target_compile_features(${test_name} PRIVATE cxx_std_23)
-        target_compile_options(${test_name} PRIVATE -fsanitize=address)
-        target_link_options(${test_name} PRIVATE -fsanitize=address)
+        if (UNIX OR APPLE OR (WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang"))
+            target_compile_options(${test_name} PRIVATE -fsanitize=address)
+            target_link_options(${test_name} PRIVATE -fsanitize=address)
+        endif()
 
         # Add the test to CTest
         add_test(NAME ${test_name} COMMAND ${test_name})

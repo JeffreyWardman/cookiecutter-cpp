@@ -42,6 +42,7 @@ function(add_example NAME)
     
   # Also include the private headers
   target_include_directories(${TARGET_NAME} PRIVATE $<TARGET_PROPERTY:{{cookiecutter.project_slug}},INCLUDE_DIRECTORIES>)
+  target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
   add_custom_target("run_${TARGET_NAME}" COMMAND "${OUTPUT_DIR}/${TARGET_NAME}" VERBATIM)
   add_dependencies("run_${TARGET_NAME}" "${TARGET_NAME}")

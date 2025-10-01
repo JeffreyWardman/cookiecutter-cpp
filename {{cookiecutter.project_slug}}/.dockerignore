@@ -2,5 +2,9 @@
 .vscode/
 .docs/
 
+build
+CMakeFiles
+target
+
 docker-compose.yml
 README.md
